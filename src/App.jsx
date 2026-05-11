@@ -9,7 +9,6 @@ import { Stats } from "./components/Stats";
 import Navbar from "./components/Navbar";
 import { Projects } from "./components/Projects";
 import { Skills } from "./components/Skills";
-import { Analytics } from "@vercel/analytics/next"
 
 function App() {
   useEffect(() => {
