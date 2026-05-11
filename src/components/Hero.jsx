@@ -115,7 +115,7 @@ export function Hero() {
 
         <div className="relative mx-auto mt-8 aspect-square w-full max-w-[16rem] animate-hero-float sm:max-w-[20rem] lg:mt-0 lg:max-w-[24rem] xl:max-w-[28rem]">
           <FloatingBadge className="-left-2 top-5 sm:left-0 sm:top-16 lg:-left-8 lg:top-24">
-            🤖AI | ML
+            🤖FrontEnd
           </FloatingBadge>
 
           <FloatingBadge className="-right-2 top-10 sm:right-0 sm:top-12 lg:-right-8 lg:top-20">
