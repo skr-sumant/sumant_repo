@@ -16,34 +16,30 @@ const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN || "";
 
 const statCards = [
   {
+  title: "LeetCode solved",
+  icon: Sparkles,
+  field: "leetcodeSolved",
+  label: "Problems solved",
+ extra: (
+  <p>
+    LeetCode handle:{" "}
+    <a
+      href={`https://leetcode.com/${LEETCODE_USERNAME}`}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1 text-accent hover:text-primary font-share relative z-10 pointer-events-auto"
+    >
+      {LEETCODE_USERNAME}
+      <ExternalLink size={14} />
+    </a>
+  </p>
+),
+},
+  {
     title: "GitHub repos",
     icon: FaGithub,
     field: "repoCount",
     label: "Repositories",
-  },
-  {
-    title: "GitHub stars",
-    icon: Star,
-    field: "starCount",
-    label: "Total stars",
-  },
-  {
-    title: "GitHub contributions",
-    icon: TrendingUp,
-    field: "contributionCount",
-    label: "Contributions",
-  },
-  {
-    title: "GitHub active days",
-    icon: Activity,
-    field: "activeDays",
-    label: "Days with contributions",
-  },
-  {
-    title: "LeetCode solved",
-    icon: Sparkles,
-    field: "leetcodeSolved",
-    label: "Problems solved",
   },
   {
     title: "LeetCode acceptance",
@@ -52,12 +48,27 @@ const statCards = [
     label: "Acceptance",
     suffix: "%",
   },
+
+  {
+    title: "GitHub active days",
+    icon: Activity,
+    field: "activeDays",
+    label: "Days with contributions",
+  },
+
   {
     title: "LeetCode rank",
     icon: Code2,
     field: "leetcodeRank",
     label: "Global rank",
   },
+  {
+    title: "GitHub contributions",
+    icon: TrendingUp,
+    field: "contributionCount",
+    label: "Contributions",
+  },
+
 ];
 
 export function Stats() {
@@ -149,14 +160,14 @@ export function Stats() {
 
         const topRepos = Array.isArray(repoData)
           ? repoData
-              .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
-              .slice(0, 3)
-              .map((repo) => ({
-                name: repo.name,
-                stars: repo.stargazers_count || 0,
-                url: repo.html_url,
-                description: repo.description || "",
-              }))
+            .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
+            .slice(0, 3)
+            .map((repo) => ({
+              name: repo.name,
+              stars: repo.stargazers_count || 0,
+              url: repo.html_url,
+              description: repo.description || "",
+            }))
           : [];
 
         const contributionCount = typeof contribData === "object" && contribData?.total
@@ -166,8 +177,8 @@ export function Stats() {
         const contributions = Array.isArray(contribData?.contributions)
           ? contribData.contributions
           : Array.isArray(contribData?.contributions?.nodes)
-          ? contribData.contributions.nodes
-          : [];
+            ? contribData.contributions.nodes
+            : [];
 
         const activeDays = contributions.filter((day) => day.count > 0).length;
         let currentStreak = 0;
@@ -245,6 +256,9 @@ export function Stats() {
                   </span>
                 </div>
                 <p className="mt-4 text-sm text-muted-foreground">{card.label}</p>
+                {card.extra && (<div className="mt-2 text-sm text-muted-foreground">{card.extra}
+</div>
+)}
               </div>
             );
           })}
@@ -270,9 +284,7 @@ export function Stats() {
               <p>
                 Current commit streak: <span className="font-semibold text-foreground">{isLoading ? "—" : stats.currentStreak} day{stats.currentStreak === 1 ? "" : "s"}</span>
               </p>
-              <p>
-                LeetCode handle: <a href={stats.leetcodeUrl} target="_blank" rel="noreferrer" className="text-accent hover:text-primary">{LEETCODE_USERNAME}</a>
-              </p>
+             
             </div>
           </div>
 
@@ -282,7 +294,11 @@ export function Stats() {
                 <p className="text-sm uppercase tracking-[0.24em] text-muted-foreground">GitHub top repos</p>
                 <h3 className="mt-4 text-3xl font-bold text-foreground">Most popular repos</h3>
               </div>
-              <ExternalLink size={26} className="text-primary" />
+              <a href={stats.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+                <FaGithub size={14} />
+
+                <ExternalLink size={26} className="text-primary" />
+              </a>
             </div>
 
             <div className="mt-6 space-y-4">

@@ -6,10 +6,11 @@ import {
   Send,
   User,
 } from "lucide-react";
+import { useState } from "react";
 import { FaInstagram } from "react-icons/fa";
 import { Section } from "./Section";
 
-const WHATSAPP_NUMBER = import.meta.env.MOB_NO;
+const WHATSAPP_NUMBER = import.meta.env.VITE_MOB_NO || "";
 
 const personalDetails = [
   {
@@ -49,23 +50,36 @@ const personalDetails = [
 ];
 
 export function Contact() {
+  const [mobile, setMobile] = useState("");
+  const [mobileError, setMobileError] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name")?.toString().trim();
     const email = formData.get("email")?.toString().trim();
+    const mobileValue = mobile.trim();
     const message = formData.get("message")?.toString().trim();
+
+    if (!/^[0-9]{10}$/.test(mobileValue)) {
+      setMobileError("Please enter a valid 10-digit mobile number using digits only.");
+      return;
+    }
+
+    setMobileError("");
 
     const whatsappMessage = [
       "Hello Sumant,",
       "",
       `Name: ${name || "Not provided"}`,
       `Email: ${email || "Not provided"}`,
+      `mobile: ${mobile || "Not provided"}`,
       "",
       "Message:",
       message || "Not provided",
     ].join("\n");
+
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
       whatsappMessage
@@ -87,6 +101,54 @@ export function Contact() {
               <DetailCard key={detail.label} {...detail} />
             ))}
           </div>
+
+          <div className="mt-10 space-y-6">
+
+  <div className="rounded-3xl bg-black/45 p-6 shadow-card backdrop-blur-4xl">
+    <h3 className="mb-4 text-2xl font-semibold text-foreground">
+      Ready to collaborate?
+    </h3>
+
+    <p className="text-muted-foreground">
+      Open to exciting projects, collaborations, and opportunities.
+      Let’s build something amazing together.
+    </p>
+  </div>
+
+  <div className="rounded-3xl bg-black/45 p-6 shadow-card backdrop-blur-4xl">
+    <h3 className="mb-4 text-2xl font-semibold text-foreground">
+      Quick contact links
+    </h3>
+
+    <div className="grid gap-3">
+      <a
+        href="mailto:sumant.raj.9907@gmail.com"
+        className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground transition hover:border-accent/40"
+      >
+        Email Me
+      </a>
+
+      <a
+        href="https://www.instagram.com/aam__rush/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground transition hover:border-accent/40"
+      >
+        Instagram
+      </a>
+
+      <a
+        href="https://wa.me/918235134811?text=Hello%20Sumant%2C%20I%20would%20like%20to%20connect%20with%20you."
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-foreground transition hover:border-accent/40"
+      >
+        Call / WhatsApp
+      </a>
+    </div>
+  </div>
+
+</div>
         </div>
 
         <form
@@ -129,10 +191,24 @@ export function Contact() {
             <input
               name="mobile"
               type="tel"
+              inputMode="numeric"
+              pattern="[0-9]{10}"
+              maxLength={10}
               required
-              placeholder="+91 1234567890"
+              value={mobile}
+              placeholder="9123456789"
               className="w-full rounded-xl bg-black/45 px-5 py-4 text-lg text-foreground outline-none backdrop-blur-xl transition placeholder:text-muted-foreground/70 focus:ring-2 focus:ring-accent/30"
+              onChange={(event) => {
+                const digits = event.currentTarget.value.replace(/\D/g, "").slice(0, 10);
+                setMobile(digits);
+                if (mobileError && /^[0-9]{10}$/.test(digits)) {
+                  setMobileError("");
+                }
+              }}
             />
+            {mobileError ? (
+              <p className="mt-2 text-sm text-destructive">{mobileError}</p>
+            ) : null}
           </div>
           
 
